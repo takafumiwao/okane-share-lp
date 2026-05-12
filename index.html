@@ -156,13 +156,12 @@
       </div>
       <h1>今日使った<br>お金、<br><span class="accent">共有しよう。</span></h1>
       <p class="hero-sub">家計簿アプリ、ふたりには重すぎませんか？<br>okane share は、パートナーやグループでサクッと支出を共有するだけの、新しいスタイルのお金アプリです。</p>
-      <form class="hero-form">
-        <input type="email" class="hero-input" placeholder="メールアドレスを入力" required>
-        <button class="hero-submit" type="submit">
-          先行登録
+      <div class="hero-form">
+        <button class="hero-submit" data-tally-open="eqKzWJ" data-tally-emoji-text="✨" data-tally-emoji-animation="wave">
+          先行登録する
           <i class="ti ti-arrow-right" style="font-size: 16px;"></i>
         </button>
-      </form>
+      </div>
       <p class="hero-note">
         <i class="ti ti-lock" style="font-size: 12px;"></i>
         ローンチ時にメールでお知らせ。先行登録者は最初の1ヶ月プレミアム無料
@@ -384,10 +383,12 @@
 <section class="cta-bottom" id="waitlist">
   <h2>ふたりのお金、<br><span style="color: var(--accent);">いっしょに見える化。</span></h2>
   <p>先行登録は1分で完了。ローンチ時にメールでお知らせします。</p>
-  <form action="https://tally.so/r/eqKzWJ" method="POST" class="hero-form">
-    <input type="email" name="email" class="hero-input" placeholder="メールアドレス" required>
-    <button class="hero-submit" type="submit">先行登録</button>
-  </form>
+  <div class="hero-form" style="justify-content: center;">
+    <button class="hero-submit" data-tally-open="eqKzWJ" data-tally-emoji-text="✨" data-tally-emoji-animation="wave">
+      先行登録する
+      <i class="ti ti-arrow-right" style="font-size: 16px;"></i>
+    </button>
+  </div>
 </section>
 
 <!-- フッター -->
@@ -446,6 +447,9 @@
     <span>Made with ♥ for couples and groups</span>
   </div>
 </footer>
+
+<!-- Tally Popup Integration -->
+<script async src="https://tally.so/widgets/embed.js"></script>
 
 </body>
 </html>
