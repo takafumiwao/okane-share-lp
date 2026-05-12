@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>okane share — 今日使ったお金、共有しよう。</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+  :root {
+    --bg: #08080A;
+    --bg-elev: #14141B;
+    --border: #1F1F24;
+    --border-2: #2A2A33;
+    --text: #FFFFFF;
+    --text-2: #B4B4BC;
+    --text-3: #8A8A92;
+    --text-4: #5C5C66;
+    --accent: #D4537E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ナビ */
+  .nav { position: sticky; top: 0; z-index: 100; padding: 20px 40px; background: rgba(8, 8, 10, 0.85); backdrop-filter: blur(20px); border-bottom: 0.5px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .nav-logo { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 500; letter-spacing: -0.01em; }
+  .nav-logo-icon { width: 28px; height: 28px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+  .nav-menu { display: flex; gap: 32px; align-items: center; }
+  .nav-link { font-size: 13px; color: var(--text-3); transition: color 0.15s; }
+  .nav-link:hover { color: var(--text); }
+  .nav-cta { padding: 10px 20px; background: var(--accent); border-radius: 999px; font-size: 13px; font-weight: 500; }
+
+  /* ヒーロー */
+  .hero { padding: 120px 40px 80px; max-width: 1200px; margin: 0 auto; }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 80px; align-items: center; }
+  @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; gap: 48px; } .nav-menu { display: none; } }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(212, 83, 126, 0.1); border: 0.5px solid var(--accent); border-radius: 999px; font-size: 11px; color: var(--accent); letter-spacing: 0.04em; font-weight: 500; margin-bottom: 24px; }
+  .hero h1 { font-size: 72px; font-weight: 500; letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 24px; }
+  .hero h1 .accent { color: var(--accent); }
+  .hero-sub { font-size: 18px; color: var(--text-3); line-height: 1.7; margin-bottom: 36px; max-width: 480px; }
+  .hero-form { display: flex; gap: 8px; max-width: 480px; margin-bottom: 16px; }
+  .hero-input { flex: 1; padding: 16px 18px; background: var(--bg-elev); border: 0.5px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; font-family: inherit; }
+  .hero-input::placeholder { color: var(--text-4); }
+  .hero-submit { padding: 16px 24px; background: var(--accent); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 6px; }
+  .hero-note { font-size: 12px; color: var(--text-4); display: flex; align-items: center; gap: 8px; }
+
+  /* スマホモック */
+  .phone-mockup { width: 360px; height: 720px; background: var(--bg); border-radius: 36px; border: 0.5px solid var(--border); overflow: hidden; margin: 0 auto; transform: rotate(-2deg); }
+  @media (max-width: 900px) { .phone-mockup { transform: none; max-width: 100%; height: auto; aspect-ratio: 360/720; } }
+
+  /* セクション共通 */
+  .section { padding: 96px 40px; max-width: 1200px; margin: 0 auto; }
+  .section-eyebrow { font-size: 11px; color: var(--accent); letter-spacing: 0.12em; font-weight: 500; margin-bottom: 12px; }
+  .section-title { font-size: 48px; font-weight: 500; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 16px; max-width: 720px; }
+  .section-sub { font-size: 16px; color: var(--text-3); max-width: 600px; margin-bottom: 56px; line-height: 1.7; }
+
+  /* 特徴グリッド */
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 900px) { .features { grid-template-columns: 1fr; } }
+  .feature-card { padding: 32px; border: 0.5px solid var(--border); border-radius: 20px; transition: all 0.2s; }
+  .feature-card:hover { border-color: var(--border-2); background: var(--bg-elev); }
+  .feature-icon { width: 48px; height: 48px; border-radius: 14px; background: rgba(212, 83, 126, 0.1); border: 0.5px solid var(--accent); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+  .feature-icon i { font-size: 22px; color: var(--accent); }
+  .feature-title { font-size: 18px; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 10px; }
+  .feature-desc { font-size: 13px; color: var(--text-3); line-height: 1.7; }
+
+  /* 機能セクション（交互配置） */
+  .feature-row { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; padding: 80px 0; border-bottom: 0.5px solid var(--border); }
+  .feature-row:last-child { border-bottom: none; }
+  .feature-row.reverse { grid-template-columns: 1fr 1fr; }
+  .feature-row.reverse .feature-content { order: 2; }
+  @media (max-width: 900px) { .feature-row, .feature-row.reverse { grid-template-columns: 1fr; gap: 32px; } .feature-row.reverse .feature-content { order: 0; } }
+  .feature-content { max-width: 480px; }
+  .feature-row .eyebrow { font-size: 12px; color: var(--accent); letter-spacing: 0.08em; font-weight: 500; margin-bottom: 12px; }
+  .feature-row h3 { font-size: 36px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 16px; }
+  .feature-row p { font-size: 15px; color: var(--text-3); line-height: 1.7; }
+  .feature-row-visual { padding: 32px; background: var(--bg-elev); border: 0.5px solid var(--border); border-radius: 20px; aspect-ratio: 1.4 / 1; display: flex; align-items: center; justify-content: center; }
+
+  /* 料金 */
+  .pricing { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 800px; margin: 0 auto; }
+  @media (max-width: 700px) { .pricing { grid-template-columns: 1fr; } }
+  .price-card { padding: 40px; border: 0.5px solid var(--border); border-radius: 20px; }
+  .price-card.featured { border-color: var(--accent); background: rgba(212, 83, 126, 0.04); }
+  .price-label { font-size: 11px; color: var(--text-4); letter-spacing: 0.08em; font-weight: 500; margin-bottom: 12px; }
+  .price-card.featured .price-label { color: var(--accent); }
+  .price-title { font-size: 22px; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .price-amount { display: flex; align-items: baseline; gap: 6px; margin-bottom: 24px; }
+  .price-num { font-size: 48px; font-weight: 500; letter-spacing: -0.03em; line-height: 1; }
+  .price-unit { font-size: 14px; color: var(--text-3); }
+  .price-features { display: flex; flex-direction: column; gap: 10px; padding-top: 24px; border-top: 0.5px solid var(--border); }
+  .price-feature { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-2); }
+  .price-feature i { font-size: 14px; color: var(--text-3); }
+  .price-card.featured .price-feature i { color: var(--accent); }
+
+  /* FAQ */
+  .faq-list { max-width: 760px; margin: 0 auto; }
+  .faq-item { padding: 24px 0; border-bottom: 0.5px solid var(--border); }
+  .faq-q { font-size: 16px; font-weight: 500; margin-bottom: 10px; }
+  .faq-a { font-size: 14px; color: var(--text-3); line-height: 1.8; }
+
+  /* CTA下部 */
+  .cta-bottom { padding: 120px 40px; text-align: center; background: linear-gradient(180deg, transparent, rgba(212, 83, 126, 0.04)); }
+  .cta-bottom h2 { font-size: 56px; font-weight: 500; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 16px; }
+  .cta-bottom p { font-size: 16px; color: var(--text-3); margin-bottom: 36px; }
+  .cta-bottom .hero-form { margin: 0 auto; }
+
+  /* フッター */
+  .footer { padding: 64px 40px 48px; border-top: 0.5px solid var(--border); }
+  .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 64px; }
+  @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
+  .footer-brand { font-size: 16px; font-weight: 500; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .footer-tagline { font-size: 12px; color: var(--text-3); margin-bottom: 20px; }
+  .footer-social { display: flex; gap: 12px; }
+  .footer-social a { width: 32px; height: 32px; border: 0.5px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--text-3); transition: all 0.15s; }
+  .footer-social a:hover { color: var(--accent); border-color: var(--accent); }
+  .footer-col h4 { font-size: 11px; color: var(--text-4); letter-spacing: 0.08em; font-weight: 500; margin-bottom: 14px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col a { font-size: 13px; color: var(--text-3); }
+  .footer-col a:hover { color: var(--text); }
+  .footer-bottom { max-width: 1200px; margin: 64px auto 0; padding-top: 24px; border-top: 0.5px solid var(--border); display: flex; justify-content: space-between; font-size: 12px; color: var(--text-4); flex-wrap: wrap; gap: 12px; }
+
+  /* スマホ画面内 */
+  .mock-status { height: 36px; display: flex; align-items: center; justify-content: space-between; padding: 0 26px; font-size: 13px; font-weight: 500; color: white; }
+  .mock-padding { padding: 28px; }
+</style>
+</head>
+<body>
+
+<!-- ナビ -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-icon">
+      <svg viewBox="0 0 100 100" style="width: 70%; height: 70%;">
+        <circle cx="38" cy="50" r="26" fill="#FFFFFF"/>
+        <circle cx="62" cy="50" r="26" fill="#FFFFFF" opacity="0.6"/>
+        <text x="38" y="59" text-anchor="middle" font-size="22" font-weight="500" fill="#D4537E" font-family="-apple-system">¥</text>
+      </svg>
+    </span>
+    okane share
+  </a>
+  <div class="nav-menu">
+    <a href="#features" class="nav-link">特徴</a>
+    <a href="#pricing" class="nav-link">料金</a>
+    <a href="#faq" class="nav-link">FAQ</a>
+    <a href="#waitlist" class="nav-cta">先行登録 →</a>
+  </div>
+</nav>
+
+<!-- ヒーロー -->
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-badge">
+        <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block;"></span>
+        COMING SOON · 2026 夏
+      </div>
+      <h1>今日使った<br>お金、<br><span class="accent">共有しよう。</span></h1>
+      <p class="hero-sub">家計簿アプリ、ふたりには重すぎませんか？<br>okane share は、パートナーやグループでサクッと支出を共有するだけの、新しいスタイルのお金アプリです。</p>
+      <form class="hero-form">
+        <input type="email" class="hero-input" placeholder="メールアドレスを入力" required>
+        <button class="hero-submit" type="submit">
+          先行登録
+          <i class="ti ti-arrow-right" style="font-size: 16px;"></i>
+        </button>
+      </form>
+      <p class="hero-note">
+        <i class="ti ti-lock" style="font-size: 12px;"></i>
+        ローンチ時にメールでお知らせ。先行登録者は最初の1ヶ月プレミアム無料
+      </p>
+    </div>
+
+    <div class="phone-mockup">
+      <div class="mock-status"><span>9:41</span><span style="display: flex; gap: 5px;"><i class="ti ti-wifi" style="font-size: 14px;"></i><i class="ti ti-battery-3" style="font-size: 14px;"></i></span></div>
+      <div style="padding: 28px 28px 0; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="display: flex; align-items: center;">
+            <div style="width: 26px; height: 26px; border-radius: 50%; background: #D4537E; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; color: white; border: 2px solid #08080A;">T</div>
+            <div style="width: 26px; height: 26px; border-radius: 50%; background: #2A2A30; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; color: white; border: 2px solid #08080A; margin-left: -8px;">A</div>
+          </div>
+          <span style="font-size: 12px; color: #8A8A92;">5月11日（月）</span>
+        </div>
+        <i class="ti ti-bell" style="font-size: 18px; color: #5C5C66;"></i>
+      </div>
+      <div style="padding: 32px 28px 0;">
+        <p style="margin: 0 0 6px; font-size: 11px; color: #5C5C66; font-weight: 500;">ふたりの今日</p>
+        <p style="margin: 0; font-size: 52px; font-weight: 500; letter-spacing: -0.04em; line-height: 1;">¥3,430</p>
+        <p style="margin: 8px 0 0; font-size: 11px; color: #5C5C66;">5件 · 昨日比 <span style="color: #D4537E;">+¥1,530</span></p>
+      </div>
+      <div style="padding: 24px 28px 8px;">
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 0.5px solid #1F1F24;">
+          <i class="ti ti-coffee" style="font-size: 18px; color: #8A8A92; width: 22px;"></i>
+          <div style="flex: 1;"><p style="margin: 0; font-size: 13px; font-weight: 500;">カフェ</p><p style="margin: 1px 0 0; font-size: 11px; color: #5C5C66;">スタバの新作 · あい</p></div>
+          <p style="margin: 0; font-size: 15px; font-weight: 500;">¥680</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 0.5px solid #1F1F24;">
+          <i class="ti ti-tools-kitchen-2" style="font-size: 18px; color: #8A8A92; width: 22px;"></i>
+          <div style="flex: 1;"><p style="margin: 0; font-size: 13px; font-weight: 500;">食費</p><p style="margin: 1px 0 0; font-size: 11px; color: #5C5C66;">お昼のお弁当 · <span style="color: #D4537E;">わたし</span></p></div>
+          <p style="margin: 0; font-size: 15px; font-weight: 500;">¥780</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 0.5px solid #1F1F24;">
+          <i class="ti ti-tag" style="font-size: 18px; color: #8A8A92; width: 22px;"></i>
+          <div style="flex: 1;"><p style="margin: 0; font-size: 13px; font-weight: 500;">買い物</p><p style="margin: 1px 0 0; font-size: 11px; color: #5C5C66;">ドラッグストア · あい</p></div>
+          <p style="margin: 0; font-size: 15px; font-weight: 500;">¥1,470</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3つの特徴 -->
+<section class="section" id="features">
+  <p class="section-eyebrow">FEATURES</p>
+  <h2 class="section-title">家計簿アプリじゃ<br>面倒な、ふたりへ。</h2>
+  <p class="section-sub">真面目な家計管理は重い。でも何にいくら使ってるかは知っておきたい。そんな絶妙なニーズに応える3つの機能。</p>
+
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon"><i class="ti ti-bolt"></i></div>
+      <p class="feature-title">10秒で記録</p>
+      <p class="feature-desc">専用テンキーとカテゴリ選択だけ。日々の入力に悩まない。LINEで通知が飛んで、すぐパートナーに届く。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><i class="ti ti-users-group"></i></div>
+      <p class="feature-title">ふたり以上で使える</p>
+      <p class="feature-desc">カップル、夫婦、家族、ルームメイト、友人旅行。グループ単位で支出を見える化。複数グループも作れます。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><i class="ti ti-heart"></i></div>
+      <p class="feature-title">会話が生まれる</p>
+      <p class="feature-desc">スタンプ・コメントで支出にリアクション。「いいなー、今度連れてって！」が自然に生まれる。お金の話が楽になります。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 機能詳細：交互配置 -->
+<section class="section">
+  <div class="feature-row">
+    <div class="feature-content">
+      <p class="eyebrow">QUICK INPUT</p>
+      <h3>サクッと記録、<br>すぐに共有。</h3>
+      <p>金額・カテゴリ・メモを10秒で入力。送信したらパートナーにプッシュ通知が飛びます。家計簿アプリのような「あとでまとめて入力」は不要。その場で記録して、その場でシェアする。</p>
+    </div>
+    <div class="feature-row-visual">
+      <!-- 入力画面のミニ -->
+      <div style="width: 240px;">
+        <p style="margin: 0 0 6px; font-size: 9px; color: #5C5C66; letter-spacing: 0.08em; font-weight: 500; text-align: center;">AMOUNT</p>
+        <div style="display: flex; align-items: baseline; justify-content: center; gap: 4px;">
+          <span style="font-size: 24px; color: #5C5C66; font-weight: 500;">¥</span>
+          <span style="font-size: 56px; font-weight: 500; letter-spacing: -0.04em; line-height: 1;">680</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 20px;">
+          <div style="aspect-ratio: 1; border: 0.5px solid #1F1F24; border-radius: 10px; display: flex; align-items: center; justify-content: center;"><i class="ti ti-tools-kitchen-2" style="font-size: 16px; color: #8A8A92;"></i></div>
+          <div style="aspect-ratio: 1; border: 0.5px solid #D4537E; background: rgba(212, 83, 126, 0.08); border-radius: 10px; display: flex; align-items: center; justify-content: center;"><i class="ti ti-coffee" style="font-size: 16px; color: #D4537E;"></i></div>
+          <div style="aspect-ratio: 1; border: 0.5px solid #1F1F24; border-radius: 10px; display: flex; align-items: center; justify-content: center;"><i class="ti ti-train" style="font-size: 16px; color: #8A8A92;"></i></div>
+          <div style="aspect-ratio: 1; border: 0.5px solid #1F1F24; border-radius: 10px; display: flex; align-items: center; justify-content: center;"><i class="ti ti-tag" style="font-size: 16px; color: #8A8A92;"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="feature-row reverse">
+    <div class="feature-content">
+      <p class="eyebrow">MONTHLY VIEW</p>
+      <h3>月末に振り返り、<br>傾向がわかる。</h3>
+      <p>カテゴリ別・メンバー別の集計、先月比、日別の支出グラフ。月末の振り返りはこの画面だけでOK。「今月はカフェ使いすぎたね」が自然と見えてきます。</p>
+    </div>
+    <div class="feature-row-visual">
+      <div style="width: 280px;">
+        <p style="margin: 0 0 4px; font-size: 9px; color: #5C5C66; letter-spacing: 0.08em; font-weight: 500;">今月のふたり</p>
+        <p style="margin: 0; font-size: 36px; font-weight: 500; letter-spacing: -0.04em; line-height: 1;">¥48,720</p>
+        <p style="margin: 6px 0 16px; font-size: 11px; color: #8A8A92;">先月比 <span style="color: #D4537E;">−¥6,280</span></p>
+        <div style="display: flex; align-items: flex-end; gap: 2px; height: 36px;">
+          <div style="flex: 1; height: 40%; background: #1F1F24;"></div>
+          <div style="flex: 1; height: 60%; background: #1F1F24;"></div>
+          <div style="flex: 1; height: 28%; background: #1F1F24;"></div>
+          <div style="flex: 1; height: 80%; background: #1F1F24;"></div>
+          <div style="flex: 1; height: 50%; background: #1F1F24;"></div>
+          <div style="flex: 1; height: 30%; background: #D4537E;"></div>
+          <div style="flex: 1; height: 20%; background: #1F1F24; opacity: 0.4;"></div>
+          <div style="flex: 1; height: 20%; background: #1F1F24; opacity: 0.4;"></div>
+          <div style="flex: 1; height: 20%; background: #1F1F24; opacity: 0.4;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="feature-row">
+    <div class="feature-content">
+      <p class="eyebrow">REACTIONS</p>
+      <h3>お金の話が、<br>気軽になる。</h3>
+      <p>パートナーの支出にスタンプやコメントでリアクション。「お金の話は重い」を「お金の話が楽しい」に変える。コミュニケーションのきっかけが自然に生まれます。</p>
+    </div>
+    <div class="feature-row-visual">
+      <div style="width: 280px;">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <div style="width: 56px; height: 56px; border-radius: 16px; background: #14141B; border: 0.5px solid #1F1F24; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;"><i class="ti ti-cup" style="font-size: 24px; color: #8A8A92;"></i></div>
+          <p style="margin: 0; font-size: 36px; font-weight: 500; letter-spacing: -0.04em;">¥680</p>
+          <p style="margin: 8px 0 0; font-size: 11px; color: #8A8A92;">カフェ · あい</p>
+        </div>
+        <div style="display: flex; gap: 6px; justify-content: center;">
+          <div style="padding: 4px 10px; background: rgba(212, 83, 126, 0.12); border: 0.5px solid #D4537E; border-radius: 999px; display: flex; align-items: center; gap: 4px;"><span style="font-size: 12px;">❤️</span><span style="font-size: 10px; color: #D4537E; font-weight: 500;">1</span></div>
+          <div style="padding: 4px 10px; background: #14141B; border: 0.5px solid #1F1F24; border-radius: 999px; display: flex; align-items: center; gap: 4px;"><span style="font-size: 12px;">🍓</span><span style="font-size: 10px; color: #8A8A92;">1</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 料金 -->
+<section class="section" id="pricing">
+  <p class="section-eyebrow">PRICING</p>
+  <h2 class="section-title">ふたりで使う体験は、<br>ずっと無料。</h2>
+  <p class="section-sub">支出を共有する基本機能はずっと無料。深く使い込みたい方向けに、プレミアム機能を月¥480でご用意。</p>
+
+  <div class="pricing">
+    <div class="price-card">
+      <p class="price-label">FREE</p>
+      <p class="price-title">無料プラン</p>
+      <div class="price-amount">
+        <span class="price-num">¥0</span>
+        <span class="price-unit">/ 月</span>
+      </div>
+      <div class="price-features">
+        <div class="price-feature"><i class="ti ti-check"></i><span>支出の記録・共有 無制限</span></div>
+        <div class="price-feature"><i class="ti ti-check"></i><span>履歴閲覧 1年分</span></div>
+        <div class="price-feature"><i class="ti ti-check"></i><span>月次集計・カテゴリ分析</span></div>
+        <div class="price-feature"><i class="ti ti-check"></i><span>プッシュ通知</span></div>
+        <div class="price-feature"><i class="ti ti-check"></i><span>2人グループ × 1つ</span></div>
+      </div>
+    </div>
+    <div class="price-card featured">
+      <p class="price-label">PREMIUM</p>
+      <p class="price-title">プレミアムプラン</p>
+      <div class="price-amount">
+        <span class="price-num">¥480</span>
+        <span class="price-unit">/ 月（年払い ¥3,800）</span>
+      </div>
+      <div class="price-features">
+        <div class="price-feature"><i class="ti ti-sparkles"></i><span>履歴の無制限保存・閲覧</span></div>
+        <div class="price-feature"><i class="ti ti-sparkles"></i><span>PDF / CSV エクスポート</span></div>
+        <div class="price-feature"><i class="ti ti-sparkles"></i><span>複数グループ作成（家族・友人）</span></div>
+        <div class="price-feature"><i class="ti ti-sparkles"></i><span>予算設定・AIアラート</span></div>
+        <div class="price-feature"><i class="ti ti-sparkles"></i><span>カスタムカテゴリ・テーマ</span></div>
+        <div class="price-feature"><i class="ti ti-sparkles"></i><span>前年比較・年間レポート</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <p class="section-eyebrow">FAQ</p>
+  <h2 class="section-title">よくある質問</h2>
+
+  <div class="faq-list">
+    <div class="faq-item">
+      <p class="faq-q">家計簿アプリと何が違うんですか？</p>
+      <p class="faq-a">okane share は「記録」より「共有」が主目的です。家計簿アプリのように細かく管理する負担なく、お互いの支出を自然に意識できるよう設計されています。銀行連携や複雑な分析機能はあえて入れていません。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">パートナーが使ってくれないと意味がない？</p>
+      <p class="faq-a">基本的にはふたりで使うアプリですが、ひとりでも記録ツールとして使えます。先に始めて「こんな感じだよ」と見せると、パートナーも入りやすくなるはずです。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">どの端末で使えますか？</p>
+      <p class="faq-a">最初は Web アプリ（PWA）として提供します。スマホのブラウザから利用可能で、ホーム画面に追加すればアプリのように使えます。リリース後半年程度で iOS / Android のアプリストア配布も予定しています。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">プライバシーは大丈夫？</p>
+      <p class="faq-a">グループのメンバーだけが支出を見られるよう、技術的に厳密にアクセス制御しています。広告掲載やデータの第三者販売は一切行いません。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">いつリリース予定？</p>
+      <p class="faq-a">2026年夏のクローズドベータを予定しています。先行登録いただいた方には、リリース時にメールでご案内します。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">先行登録すると何かいいことが？</p>
+      <p class="faq-a">ローンチ時の優先招待と、最初の1ヶ月のプレミアム機能無料体験をお約束します。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 下部 CTA -->
+<section class="cta-bottom" id="waitlist">
+  <h2>ふたりのお金、<br><span style="color: var(--accent);">いっしょに見える化。</span></h2>
+  <p>先行登録は1分で完了。ローンチ時にメールでお知らせします。</p>
+  <form class="hero-form">
+    <input type="email" class="hero-input" placeholder="メールアドレスを入力" required>
+    <button class="hero-submit" type="submit">
+      先行登録
+      <i class="ti ti-arrow-right" style="font-size: 16px;"></i>
+    </button>
+  </form>
+</section>
+
+<!-- フッター -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <p class="footer-brand">
+        <span class="nav-logo-icon">
+          <svg viewBox="0 0 100 100" style="width: 70%; height: 70%;">
+            <circle cx="38" cy="50" r="26" fill="#FFFFFF"/>
+            <circle cx="62" cy="50" r="26" fill="#FFFFFF" opacity="0.6"/>
+            <text x="38" y="59" text-anchor="middle" font-size="22" font-weight="500" fill="#D4537E" font-family="-apple-system">¥</text>
+          </svg>
+        </span>
+        okane share
+      </p>
+      <p class="footer-tagline">今日使ったお金、共有しよう。</p>
+      <div class="footer-social">
+        <a href="#" aria-label="X"><i class="ti ti-brand-x" style="font-size: 16px;"></i></a>
+        <a href="#" aria-label="Instagram"><i class="ti ti-brand-instagram" style="font-size: 16px;"></i></a>
+        <a href="#" aria-label="TikTok"><i class="ti ti-brand-tiktok" style="font-size: 16px;"></i></a>
+        <a href="#" aria-label="LINE"><i class="ti ti-brand-line" style="font-size: 16px;"></i></a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>PRODUCT</h4>
+      <ul>
+        <li><a href="#features">特徴</a></li>
+        <li><a href="#pricing">料金</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>COMPANY</h4>
+      <ul>
+        <li><a href="#">会社概要</a></li>
+        <li><a href="#">ブログ</a></li>
+        <li><a href="#">お問い合わせ</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>LEGAL</h4>
+      <ul>
+        <li><a href="#">利用規約</a></li>
+        <li><a href="#">プライバシーポリシー</a></li>
+        <li><a href="#">特定商取引法</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2026 okane share. All rights reserved.</span>
+    <span>Made with ♥ for couples and groups</span>
+  </div>
+</footer>
+
+</body>
+</html>
